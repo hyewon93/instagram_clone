@@ -7,7 +7,7 @@ import useUserProfileStore from "../store/userProfileStore";
 const useGetUserProfileByUsername = (username) => {
   const [isLoading, setIsLoading] = useState(true);
   const showToast = useShowToast();
-const {userProfile, setUserProfile} = useUserProfileStore();
+  const {userProfile, setUserProfile} = useUserProfileStore();
 
   useEffect(() => {
     const getUserProfile = async () => {
