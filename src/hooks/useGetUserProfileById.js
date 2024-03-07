@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react"
-import { useAuthState } from "react-firebase-hooks/auth";
 import useShowToast from "./useShowToast";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
