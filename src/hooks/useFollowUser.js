@@ -4,6 +4,7 @@ import useShowToast from "./useShowToast";
 import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 import useAuthStore from "../store/authStore";
+import useNotifications from "./useNotifications";
 
 const useFollowUser = (userId) => {
     const [isUpdating, setIsUpdating] = useState(false);
@@ -11,6 +12,7 @@ const useFollowUser = (userId) => {
     const authUser = useAuthStore((state) => state.user);
     const setAuthUser = useAuthStore((state) => state.setUser);
     const {userProfile, setUserProfile} = useUserProfileStore();
+    const {handleNotification} = useNotifications();
     const showToast = useShowToast();
 
     const handleFollowUser = async () => {
@@ -63,6 +65,8 @@ const useFollowUser = (userId) => {
                     ...authUser,
                     following: [...authUser.following, userId]
                 }));
+
+                handleNotification("follow", userId);
 
                 setIsFollowing(true);
             }

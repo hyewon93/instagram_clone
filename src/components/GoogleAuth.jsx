@@ -40,6 +40,7 @@ const GoogleAuth = ({ prefix }) => {
           followers: [],
           following: [],
           posts: [],
+          notifications: [],
           createdAt: Date.now()
         };
 

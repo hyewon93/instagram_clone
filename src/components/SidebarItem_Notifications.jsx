@@ -1,13 +1,14 @@
-import { Box, Tooltip, Link, Button, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, DrawerFooter, Flex, Avatar, Text, VStack } from "@chakra-ui/react";
-import { Link as RouterLink } from "react-router-dom";
+import { Box, Tooltip, Button, Drawer, useDisclosure, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerHeader, DrawerBody, DrawerFooter, Flex, Avatar, Text, VStack, Spinner } from "@chakra-ui/react";
 import { NotificationsLogo } from "../assets/constants";
 import { useRef } from "react";
 import Notification from "./Notification";
+import useGetNotifications from "../hooks/useGetNotifications";
 
 const SidebarItem_Notifications = () => {
 
   const {isOpen, onOpen, onClose} = useDisclosure();
   const drawerButtonRef = useRef();
+  const {isLoading, notifications} = useGetNotifications();
 
   return (
     <>
@@ -39,10 +40,13 @@ const SidebarItem_Notifications = () => {
         <DrawerHeader fontWeight={"bold"}>Notifications</DrawerHeader>
 
         <DrawerBody maxH={"90vh"} overflowY={"auto"}>
+          {isLoading && <Spinner />}
+          {!isLoading && 
+            notifications.map((notification, idx) => (
+              <Notification key={idx} notification={notification} />
+            ))
+          }
           
-          <Notification type={"follow"} />
-          <Notification type={"comment"} />
-          <Notification type={"like"} />
         </DrawerBody>
       </DrawerContent>
     </Drawer>
