@@ -2,10 +2,22 @@ import { Avatar, Button, Flex, Image, Text } from "@chakra-ui/react"
 import { Link } from "react-router-dom"
 import useAuthStore from "../store/authStore"
 import { timeAgo } from "../utils/timeAgo";
+import useFollowUser from "../hooks/useFollowUser";
 
 const Notification = ({ notification }) => {
     const authUser = useAuthStore(state => state.user);
     const isFollowing = authUser.following.length > 0 && authUser.following.includes(notification.sentBy);
+    const {isUpdating, handleFollowUser} = useFollowUser(notification.sentBy);
+
+    const onFollowUser = async () => {
+        await handleFollowUser();
+        setUser({
+          ...user, 
+          followers: isFollowing 
+            ? user.followers.filter((follower) => follower.uid !== notification.sentBy)
+            : [...user.followers, notification.sentBy]
+        });
+    };
 
     return (
         <>
@@ -27,6 +39,8 @@ const Notification = ({ notification }) => {
                                 color={"black"} 
                                 _hover={{ bg: "gray.400" }} 
                                 size={{ base:"xs", md: "sm"}}
+                                onClick={onFollowUser}
+                                isLoading={isUpdating}
                             >
                                 Unfollow
                             </Button>
@@ -49,6 +63,8 @@ const Notification = ({ notification }) => {
                                 color={"white"} 
                                 _hover={{ bg: "blue.600" }} 
                                 size={{ base:"xs", md: "sm"}}
+                                onClick={onFollowUser}
+                                isLoading={isUpdating}
                             >
                                 Follow
                             </Button>
