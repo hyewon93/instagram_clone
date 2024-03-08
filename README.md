@@ -37,3 +37,16 @@ Alternatively, you can also explore the site by logging in with the following te
 
 ### Config
 <img alt="NPM" src ="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white"/>
+
+
+## 🔥 Reference
+
+[React](https://react.dev/reference/react)
+
+[Vite](https://vitejs.dev/guide/)
+
+[Firebase Doc](https://firebase.google.com/docs/)
+
+[Chakra UI](https://chakra-ui.com/getting-started)
+
+[Build and Deploy an Instagram Clone with React and Firebase – Tutorial](https://www.youtube.com/watch?v=RMScMwY2B6Q)
