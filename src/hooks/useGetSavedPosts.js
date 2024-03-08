@@ -7,43 +7,44 @@ import { firestore } from "../firebase/firebase";
 
 const useGetUserPosts = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const { posts, setPosts } = usePostStore();
+  const [savedPosts, setSavedPosts] = useState(true);
   const showToast = useShowToast();
   const {userProfile} = useUserProfileStore();
 
+
   useEffect(() => {
-    const getPosts = async () => {
+    const getSavedPosts = async () => {
         if(!userProfile) return;
 
         setIsLoading(true);
         setPosts([]);
 
         try {
-            const q = query(collection(firestore, "posts"), where("createdBy", "==", userProfile.uid));
+            const q = query(collection(firestore, "posts"), where("id", "in", userProfile.savedPosts));
             const querySnapshot = await getDocs(q);
 
-            const posts = [];
+            const savedPosts = [];
             querySnapshot.forEach(doc => {
-                posts.push({...doc.data(), id: doc.id});
+                savedPosts.push({...doc.data(), id: doc.id});
             });
 
-            posts.sort((a,b) => b.createdAt - a.createdAt);
+            savedPosts.sort((a,b) => b.createdAt - a.createdAt);
 
-            setPosts(posts);
+            setSavedPosts(savedPosts);
 
         } catch (error) {
             showToast("Error", error.message, "error");
-            setPosts([]);
+            setSavedPosts([]);
 
         } finally {
             setIsLoading(false);
         }
     }
 
-    getPosts();
-  }, [ setPosts, userProfile, showToast ]);
+    getSavedPosts();
+  }, [ setSavedPosts, userProfile, showToast ]);
 
-  return {isLoading, posts};
+  return {isLoading, savedPosts};
 }
 
 export default useGetUserPosts

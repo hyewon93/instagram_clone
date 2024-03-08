@@ -1,6 +1,4 @@
 import { Box, Flex, Grid, Skeleton, Text, VStack } from "@chakra-ui/react";
-import { useEffect } from "react";
-import { useState } from "react";
 import ProfilePost from "./ProfilePost";
 import useGetUserPosts from "../hooks/useGetUserPosts";
 

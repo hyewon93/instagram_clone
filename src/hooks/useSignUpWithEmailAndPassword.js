@@ -51,6 +51,7 @@ const useSignUpWithEmailAndPassword = () => {
                     following: [],
                     posts: [],
                     notifications: [],
+                    savedPosts: [],
                     createdAt: Date.now()
                 };
 

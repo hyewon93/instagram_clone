@@ -4,6 +4,7 @@ import ProfileTabs from "../components/ProfileTabs";
 import ProfilePosts from "../components/ProfilePosts";
 import useGetUserProfileByUsername from "../hooks/useGetUserProfileByUsername";
 import { useParams, Link as RouterLink } from "react-router-dom";
+import { useState } from "react";
 
 const ProfilePage = () => {
 

@@ -10,6 +10,8 @@ const SidebarItem_Notifications = () => {
   const drawerButtonRef = useRef();
   const {isLoading, notifications} = useGetNotifications();
 
+  const noNotifications = !isLoading && notifications.length === 0;
+
   return (
     <>
     <Tooltip hasArrow label="Notifications" placement="right" ml={1} openDelay={500} display={{ base: 'block', md: 'none'}}>
@@ -41,7 +43,10 @@ const SidebarItem_Notifications = () => {
 
         <DrawerBody maxH={"90vh"} overflowY={"auto"}>
           {isLoading && <Spinner />}
-          {!isLoading && 
+          {!isLoading && noNotifications && (
+            <NoNotifications />
+          )}
+          {!isLoading && !noNotifications && 
             notifications.map((notification, idx) => (
               <Notification key={idx} notification={notification} />
             ))
@@ -54,4 +59,12 @@ const SidebarItem_Notifications = () => {
   )
 }
 
-export default SidebarItem_Notifications
+export default SidebarItem_Notifications;
+
+const NoNotifications = () => {
+  return (
+    <Flex flexDir={"column"} textAlign={"center"} mx={"auto"} mt={10}>
+      <Text fontSize={"2xl"}>No Notifications.</Text>
+    </Flex>
+  );
+};

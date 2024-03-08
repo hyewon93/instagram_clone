@@ -49,6 +49,7 @@ const Sidebar = () => {
               variant={"ghost"}
               _hover={{ bg: "transparent" }}
               isLoading={isLoggingOut}
+              onClick={handleLogout}
             >
               Logout
             </Button>
