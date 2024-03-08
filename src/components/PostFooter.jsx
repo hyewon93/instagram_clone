@@ -35,9 +35,12 @@ const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
                         </Box>    
                     </Flex>   
                     <Flex>
-                        <Box onClick={handleSavePost} cursor={"pointer"} fontSize={18}>
-                            {!isSaved ? (<SaveLogo />) : (<RemoveLogo />)}
-                        </Box>    
+                        {authUser.uid !== post.createdBy && (
+                            <Box onClick={handleSavePost} cursor={"pointer"} fontSize={18}>
+                                {!isSaved ? (<SaveLogo />) : (<RemoveLogo />)}
+                            </Box>
+                        )}
+                            
                     </Flex> 
                 </Flex>
                 
