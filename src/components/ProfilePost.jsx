@@ -13,6 +13,9 @@ import { arrayRemove, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import usePostStore from "../store/postStore";
 import Comment from "./Comment";
 import Caption from "./Caption";
+import useGetUserProfileById from "../hooks/useGetUserProfileById";
+import useGetUserById from "../hooks/useGetUserById";
+import { Link } from "react-router-dom";
 
 const ProfilePost = ({ post }) => {
     const {isOpen, onOpen, onClose} = useDisclosure();
@@ -22,6 +25,7 @@ const ProfilePost = ({ post }) => {
     const [isDeleting, setIsDeleting] = useState(false);
     const deletePost = usePostStore(state => state.deletePost);
     const decrementPostsCount = useUserProfileStore(state => state.deletePost);
+    const {searchedUser} = useGetUserById(post.createdBy);
     
     const handleDeletePost = async () => {
         if(!window.confirm("Are you sure you want to delete this post?")) return;
@@ -97,7 +101,7 @@ const ProfilePost = ({ post }) => {
             <ModalOverlay />
             <ModalContent>
                 <ModalCloseButton/>
-                <ModalBody bg={"white"} py={5}>
+                <ModalBody bg={"white"} py={5} borderRadius={4}>
                     <Flex gap={4} w={{ base: "90%", sm: "70%", md: "full" }} mx={"auto"} maxH={"90vh"} minH={"50vh"}>
                         <Flex borderRadius={4} overflow={"hidden"} border={"1px soild"} borderColor={"blackAlpha.200"} flex={1.5} justifyContent={"center"} alignItems={"center"}>
                             <Image src={post.imageURL} alt="profile post" />
@@ -105,13 +109,17 @@ const ProfilePost = ({ post }) => {
                         <Flex flex={1} flexDir={"column"} px={10} display={{ base: "none", md: "flex"}}>
                             <Flex alignContent={"center"} justifyContent={"space-between"}>
                                 <Flex alignItems={"center"} gap={4}>
-                                    <Avatar src={userProfile.profilePicURL} size={"sm"} />
-                                    <Text fontWeight={"bold"} fontSize={12}>
-                                        {userProfile.username}
-                                    </Text>
+                                    <Link to={`/${searchedUser?.username}`}>
+                                        <Avatar src={searchedUser?.profilePicURL} size={"sm"} />
+                                    </Link>
+                                    <Link to={`/${searchedUser?.username}`}>
+                                        <Text fontWeight={"bold"} fontSize={12}>
+                                            {searchedUser?.username}
+                                        </Text>
+                                    </Link>
                                 </Flex>
 
-                                {authUser.uid === userProfile.uid && (
+                                {authUser.uid === searchedUser?.uid && (
                                     <Button 
                                         size={"sm"} 
                                         bg={"transparent"} 

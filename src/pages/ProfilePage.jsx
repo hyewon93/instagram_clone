@@ -22,7 +22,7 @@ const ProfilePage = ({ tab }) => {
             {isLoading && <ProfileHeaderSkeleton />}
         </Flex>
         <Flex px={{ base: 2, sm: 4 }} maxW={"full"} mx={"auto"} borderTop={"1px soild"} borderColor={"blackAlpha.200"} direction={"column"}>
-            <ProfileTabs tab={tab} username={username} />
+            <ProfileTabs username={username} userProfile={userProfile} />
             <ProfilePosts tab={tab} />
         </Flex>
     </Container>

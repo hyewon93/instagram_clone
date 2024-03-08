@@ -1,26 +1,24 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import useShowToast from "./useShowToast";
 import { doc, getDoc } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 
-const useGetUserProfileById = (userId) => {
+const useGetUserById = (userId) => {
     const [isLoading, setIsLoading] = useState(true);
-    const [userProfile, setUserProfile] = useState(null);
+    const [searchedUser, setUser] = useState(null);
     const showToast = useShowToast();
 
     useEffect(() => {
 
-        const getUserProfile = async () => {
+        const getUser = async () => {
             setIsLoading(true);
-            setUserProfile(null);
+            setUser(null);
 
             try {
 
-                console.log("userId " + userId);
                 const userRef = await getDoc(doc(firestore, "users", userId));
                 if(userRef.exists()) {
-                    setUserProfile(userRef.data());
-                    console.log("userRef.data() : " + userRef.data());
+                    setUser(userRef.data());
                 }
 
             } catch (error) {
@@ -30,11 +28,11 @@ const useGetUserProfileById = (userId) => {
             }
         };
 
-        getUserProfile();
+        getUser();
 
-    }, [showToast, setUserProfile, userId]);
+    }, [showToast, setUser, userId]);
 
-    return { isLoading, userProfile, setUserProfile };
+    return { isLoading, searchedUser };
 }
 
-export default useGetUserProfileById
+export default useGetUserById

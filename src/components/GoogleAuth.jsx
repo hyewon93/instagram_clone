@@ -42,6 +42,7 @@ const GoogleAuth = ({ prefix }) => {
           posts: [],
           notifications: [],
           savedPosts: [],
+          likedPosts: [],
           createdAt: Date.now()
         };
 

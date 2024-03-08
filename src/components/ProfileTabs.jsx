@@ -1,10 +1,12 @@
 import { Box, Flex, Text } from "@chakra-ui/react";
 import { BsBookmark, BsGrid3X3, BsSuitHeart } from "react-icons/bs";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import useAuthStore from "../store/authStore";
 
-const ProfileTabs = ({ tab, username }) => {
+const ProfileTabs = ({ username, userProfile }) => {
 
     const {pathname} = useLocation();
+    const authUser = useAuthStore(state => state.user);
 
     return (
         <Flex w={"full"} justifyContent={"center"} gap={{ base: 4, sm: 10}} textTransform={"bold"} fontWeight={"bold"}>
@@ -18,22 +20,26 @@ const ProfileTabs = ({ tab, username }) => {
                 </Flex>
             </Link>
             
-            <Link to={`/${username}/saved`}>
-                <Flex borderTop={ pathname.split("/")[2] === "saved" ? "1px solid gray" : null} alignItems={"center"} p={3} gap={1} cursor={"pointer"}>
-                    <Box fontSize={20}>
-                        <BsBookmark />
-                    </Box>
-                    <Text fontSize={12} display={{ base: "none", sm: "block"}}>SAVED</Text>
-                </Flex>
-            </Link>
-            <Link to={`/${username}/likes`}>
-                <Flex borderTop={ pathname.split("/")[2] === "likes" ? "1px solid gray" : null} alignItems={"center"} p={3} gap={1} cursor={"pointer"}>
-                    <Box fontSize={20}>
-                        <BsSuitHeart fontWeight={"bold"} />
-                    </Box>
-                    <Text fontSize={12} display={{ base: "none", sm: "block"}}>LIKES</Text>
-                </Flex>
-            </Link>
+            {authUser.uid === userProfile?.uid && (
+                <>
+                <Link to={`/${username}/saved`}>
+                    <Flex borderTop={ pathname.split("/")[2] === "saved" ? "1px solid gray" : null} alignItems={"center"} p={3} gap={1} cursor={"pointer"}>
+                        <Box fontSize={20}>
+                            <BsBookmark />
+                        </Box>
+                        <Text fontSize={12} display={{ base: "none", sm: "block"}}>SAVED</Text>
+                    </Flex>
+                </Link>
+                <Link to={`/${username}/likes`}>
+                    <Flex borderTop={ pathname.split("/")[2] === "likes" ? "1px solid gray" : null} alignItems={"center"} p={3} gap={1} cursor={"pointer"}>
+                        <Box fontSize={20}>
+                            <BsSuitHeart fontWeight={"bold"} />
+                        </Box>
+                        <Text fontSize={12} display={{ base: "none", sm: "block"}}>LIKES</Text>
+                    </Flex>
+                </Link>
+                </>
+            )}
         </Flex>
     )
 }
