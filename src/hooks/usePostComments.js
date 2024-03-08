@@ -32,7 +32,10 @@ const usePostComments = () => {
 
             const postRef = doc(firestore, "posts", postId);
             const postSnap = await getDoc(postRef);
-            handleNotification("comment", postSnap.data().createdBy, postId, newComment.id);
+
+            if(authUser.uid !== postSnap.data().createdBy) {
+                handleNotification("comment", postSnap.data().createdBy, postId, newComment.id);
+            }
 
             addComment(postId, newComment);
 

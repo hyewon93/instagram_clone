@@ -1,12 +1,17 @@
-import { Box, Flex, Text, VStack } from "@chakra-ui/react"
+import { Box, Button, Flex, Text, VStack, useDisclosure } from "@chakra-ui/react"
 import SuggestedHeader from "./SuggestedHeader"
 import { Link } from "@chakra-ui/react"
 import SuggestedUser from "./SuggestedUser"
 import useGetSuggestedUsers from "../hooks/useGetSuggestedUsers"
+import SeeAllModal from "./SeeAllModal"
 
 const SuggestedUsers = () => {
 
     const { isLoading, suggestedUsers } = useGetSuggestedUsers();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    const allSuggestedUsers = suggestedUsers;
+    const limitSuggestedUsers = suggestedUsers.slice(0,3);
 
     if(isLoading) return null;
 
@@ -19,13 +24,14 @@ const SuggestedUsers = () => {
                     <Text fontSize={12} fontWeight={"bold"} color={"gray.500"}>
                         Suggested for you
                     </Text>
-                    <Text fontSize={12} fontWeight={"bold"} _hover={{ color: "gray.400" }} cursor={"pointer"}>
+                    <Button onClick={onOpen} bg={"transparent"} pr={0} fontSize={12} fontWeight={"bold"} _hover={{ color: "gray.400", bg: "transparent" }} cursor={"pointer"}>
                         See All
-                    </Text>
+                    </Button>
                 </Flex>
             )}
+            {isOpen ? <SeeAllModal isOpen={isOpen} onClose={onClose} suggestedUsers={allSuggestedUsers} /> : null}
 
-            {suggestedUsers.map((user) => (
+            {limitSuggestedUsers.map((user) => (
                 <SuggestedUser user={user} key={user.id} />
             ))}
 

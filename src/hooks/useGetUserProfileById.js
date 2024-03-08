@@ -16,11 +16,9 @@ const useGetUserProfileById = (userId) => {
 
             try {
 
-                console.log("userId " + userId);
                 const userRef = await getDoc(doc(firestore, "users", userId));
                 if(userRef.exists()) {
                     setUserProfile(userRef.data());
-                    console.log("userRef.data() : " + userRef.data());
                 }
 
             } catch (error) {

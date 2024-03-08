@@ -61,6 +61,8 @@ const useGetNotifications = () => {
                             });
                         }
 
+                        notifications.sort((a,b) => b.createdAt - a.createdAt);
+
                         setNotifications(notifications);
                     });
 

@@ -20,11 +20,15 @@ const useLikePost = (post) => {
 
 		try {
 			const postRef = doc(firestore, "posts", post.id);
+			const userRef = doc(firestore, "users", authUser.uid);
 			await updateDoc(postRef, {
 				likes: isLiked ? arrayRemove(authUser.uid) : arrayUnion(authUser.uid),
 			});
+			await updateDoc(userRef, {
+				likedPosts: isLiked ? arrayRemove(post.id) : arrayUnion(post.id),
+			});
 
-			if(!isLiked) {
+			if(!isLiked && authUser.uid !== post.createdBy) {
 				handleNotification("like", post.createdBy, post.id);
 			}
 

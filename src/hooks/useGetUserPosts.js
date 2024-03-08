@@ -41,6 +41,27 @@ const useGetUserPosts = ({ type }) => {
                     });
                 }
 
+            } else if(type === "likes") {
+
+                const likedPosts = [];
+                if(userProfile.likedPosts) {
+                    let promises = userProfile.likedPosts.map( async (likePost) => {
+                        const docRef = doc(firestore, "posts", likePost);
+                        const docSnap = await getDoc(docRef);
+
+                        likedPosts.push({...docSnap.data(), id: docSnap.id});
+                    });
+
+                    Promise.all(promises)
+                    .then(() => {
+                        likedPosts.sort((a,b) => b.createdAt - a.createdAt);
+                        
+                        setPosts(likedPosts);
+
+                        setIsLoading(false);
+                    });
+                }
+
             } else {
                 const q = query(collection(firestore, "posts"), where("createdBy", "==", userProfile.uid));
                 const querySnapshot = await getDocs(q);
