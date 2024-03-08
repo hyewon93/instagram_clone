@@ -2,12 +2,9 @@ import { Box, Flex, Grid, Skeleton, Text, VStack } from "@chakra-ui/react";
 import ProfilePost from "./ProfilePost";
 import useGetUserPosts from "../hooks/useGetUserPosts";
 
-const ProfilePosts = () => {
+const ProfilePosts = ({ tab }) => {
 
-  const {isLoading, posts} = useGetUserPosts();
-
-  const noPostsFound = !isLoading && posts.length === 0;
-  if(noPostsFound) return <NoPostsFound />;
+  const {isLoading, posts} = useGetUserPosts({type: tab});
 
   return (
     <Grid templateColumns={{ sm: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }} gap={1} columnGap={1}>

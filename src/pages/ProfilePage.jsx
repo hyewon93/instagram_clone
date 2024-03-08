@@ -4,9 +4,8 @@ import ProfileTabs from "../components/ProfileTabs";
 import ProfilePosts from "../components/ProfilePosts";
 import useGetUserProfileByUsername from "../hooks/useGetUserProfileByUsername";
 import { useParams, Link as RouterLink } from "react-router-dom";
-import { useState } from "react";
 
-const ProfilePage = () => {
+const ProfilePage = ({ tab }) => {
 
   const { username } = useParams();
   const { isLoading, userProfile } = useGetUserProfileByUsername(username);
@@ -23,8 +22,8 @@ const ProfilePage = () => {
             {isLoading && <ProfileHeaderSkeleton />}
         </Flex>
         <Flex px={{ base: 2, sm: 4 }} maxW={"full"} mx={"auto"} borderTop={"1px soild"} borderColor={"blackAlpha.200"} direction={"column"}>
-            <ProfileTabs />
-            <ProfilePosts />
+            <ProfileTabs tab={tab} username={username} />
+            <ProfilePosts tab={tab} />
         </Flex>
     </Container>
   )

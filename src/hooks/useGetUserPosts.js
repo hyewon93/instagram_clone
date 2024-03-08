@@ -2,10 +2,10 @@ import { useEffect, useState } from "react"
 import usePostStore from "../store/postStore";
 import useShowToast from "./useShowToast";
 import useUserProfileStore from "../store/userProfileStore";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { firestore } from "../firebase/firebase";
 
-const useGetUserPosts = () => {
+const useGetUserPosts = ({ type }) => {
   const [isLoading, setIsLoading] = useState(true);
   const { posts, setPosts } = usePostStore();
   const showToast = useShowToast();
@@ -19,29 +19,53 @@ const useGetUserPosts = () => {
         setPosts([]);
 
         try {
-            const q = query(collection(firestore, "posts"), where("createdBy", "==", userProfile.uid));
-            const querySnapshot = await getDocs(q);
 
-            const posts = [];
-            querySnapshot.forEach(doc => {
-                posts.push({...doc.data(), id: doc.id});
-            });
+            if(type === "saved") {
 
-            posts.sort((a,b) => b.createdAt - a.createdAt);
+                const savedPosts = [];
+                if(userProfile.savedPosts) {
+                    let promises = userProfile.savedPosts.map( async (savedPost) => {
+                        const docRef = doc(firestore, "posts", savedPost);
+                        const docSnap = await getDoc(docRef);
 
-            setPosts(posts);
+                        savedPosts.push({...docSnap.data(), id: docSnap.id});
+                    });
+
+                    Promise.all(promises)
+                    .then(() => {
+                        savedPosts.sort((a,b) => b.createdAt - a.createdAt);
+                        
+                        setPosts(savedPosts);
+
+                        setIsLoading(false);
+                    });
+                }
+
+            } else {
+                const q = query(collection(firestore, "posts"), where("createdBy", "==", userProfile.uid));
+                const querySnapshot = await getDocs(q);
+    
+                const posts = [];
+                querySnapshot.forEach(doc => {
+                    posts.push({...doc.data(), id: doc.id});
+                });
+    
+                posts.sort((a,b) => b.createdAt - a.createdAt);
+    
+                setPosts(posts);
+
+                setIsLoading(false);
+            }
 
         } catch (error) {
             showToast("Error", error.message, "error");
             setPosts([]);
-
-        } finally {
             setIsLoading(false);
         }
     }
 
     getPosts();
-  }, [ setPosts, userProfile, showToast ]);
+  }, [ type, setPosts, userProfile, showToast ]);
 
   return {isLoading, posts};
 }
